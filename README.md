@@ -1,6 +1,9 @@
 # hja-fire-storage-lowflow
 HJA storage-fire impacts on low flows workflow and paper notes
 
+## Authors
+This workflow was developed by MS student Shannon Duffy at Oregon State University under the advisement of Drs. Segura and Sullivan
+
 ## Main idea
 Used streamflow data across watersheds with varying subsurface storage at the HJ Andrews to evaluate how low flow and recession curves change following the Holiday Farm and Lookout Creek fires. 
 

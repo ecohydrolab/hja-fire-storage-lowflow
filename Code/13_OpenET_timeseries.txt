@@ -1,0 +1,222 @@
+///Paste this text into Google Earth Engine Code Editor. Go to "Tasks" and hit run on each of the 4 tasks which each export a csv to your Google Drive.
+
+// ================================================================
+// Inputs
+// ================================================================
+var HFF_polygons = ee.FeatureCollection('users/duffshan/HFF_vegmort_polygons_Clip');
+var LF_polygons = ee.FeatureCollection('users/duffshan/LF_vegmort_polygons_Clip');
+var unburned_polygon = ee.FeatureCollection('users/duffshan/HJA_unburned');
+var watersheds = ee.FeatureCollection('users/duffshan/Gauged_Watersheds');
+
+var et = ee.ImageCollection(
+    'projects/openet/assets/ensemble/conus/gridmet/monthly/v2_1')
+  .filter(ee.Filter.eq('mgrs_tile', '10T'))
+  .filterDate('2020-01-01', '2026-01-01')
+  .select('et_ensemble_mad');
+
+print('Images available:', et.size());
+
+
+// ================================================================
+// Calculate mean across watershed for every available month
+// ================================================================
+
+var results_watersheds = et.map(function(img) {
+
+  var date = ee.Date(img.get('system:time_start'));
+  var label = date.format('YYYY_MM');
+
+  var stats_watersheds = img.reduceRegions({
+    collection: watersheds,
+    reducer: ee.Reducer.mean().combine({
+      reducer2: ee.Reducer.stdDev(),
+      sharedInputs: true
+    })
+    .combine({
+      reducer2: ee.Reducer.count(),
+      sharedInputs: true
+    }),
+    scale: 30
+  });
+
+  return stats_watersheds.map(function(f) {
+    var sd=ee.Number(f.get('stdDev'));
+    var n = ee.Number(f.get('count'));
+    var se = sd.divide(n.sqrt());
+    return f.set({
+      'month': label,
+      'date': date.format('YYYY-MM-dd'),
+      'standard_error': se
+    });
+  });
+
+}).flatten();
+
+// ================================================================
+// Calculate mean across burn severities within HFF footprint for every available month
+// ================================================================
+
+var results_HFF = et.map(function(img) {
+
+  var date = ee.Date(img.get('system:time_start'));
+  var label = date.format('YYYY_MM');
+
+  var stats_HFF = img.reduceRegions({
+    collection: HFF_polygons,
+    reducer: ee.Reducer.mean().combine({
+      reducer2: ee.Reducer.stdDev(),
+      sharedInputs: true
+    })
+    .combine({
+      reducer2: ee.Reducer.count(),
+      sharedInputs: true
+    }),
+    scale: 30
+  });
+
+  return stats_HFF.map(function(f) {
+    var sd=ee.Number(f.get('stdDev'));
+    var n = ee.Number(f.get('count'));
+    var se = sd.divide(n.sqrt());
+    return f.set({
+      'month': label,
+      'date': date.format('YYYY-MM-dd'),
+      'standard_error': se
+    });
+  });
+
+}).flatten();
+
+// ================================================================
+// Calculate mean across burn severities within LF footprint for every available month
+// ================================================================
+
+var results_LF = et.map(function(img) {
+
+  var date = ee.Date(img.get('system:time_start'));
+  var label = date.format('YYYY_MM');
+
+  var stats_LF = img.reduceRegions({
+    collection: LF_polygons,
+    reducer: ee.Reducer.mean().combine({
+      reducer2: ee.Reducer.stdDev(),
+      sharedInputs: true
+    })
+    .combine({
+      reducer2: ee.Reducer.count(),
+      sharedInputs: true
+    }),
+    scale: 30
+  });
+
+  return stats_LF.map(function(f) {
+    var sd=ee.Number(f.get('stdDev'));
+    var n = ee.Number(f.get('count'));
+    var se = sd.divide(n.sqrt());
+    return f.set({
+      'month': label,
+      'date': date.format('YYYY-MM-dd'),
+      'standard_error': se
+    });
+  });
+
+}).flatten();
+
+// ================================================================
+// Calculate mean across outside of burn footprints for every available month
+// ================================================================
+
+var results_unburned = et.map(function(img) {
+
+  var date = ee.Date(img.get('system:time_start'));
+  var label = date.format('YYYY_MM');
+
+  var stats_unburned = img.reduceRegions({
+    collection: unburned_polygon,
+    reducer: ee.Reducer.mean().combine({
+      reducer2: ee.Reducer.stdDev(),
+      sharedInputs: true
+    })
+    .combine({
+      reducer2: ee.Reducer.count(),
+      sharedInputs: true
+    }),
+    scale: 30
+  });
+
+  return stats_unburned.map(function(f) {
+    var sd=ee.Number(f.get('stdDev'));
+    var n = ee.Number(f.get('count'));
+    var se = sd.divide(n.sqrt());
+    return f.set({
+      'month': label,
+      'date': date.format('YYYY-MM-dd'),
+      'standard_error': se
+    });
+  });
+
+}).flatten();
+
+// ================================================================
+// Export
+// ================================================================
+
+Export.table.toDrive({
+  collection: results_watersheds,
+  description: 'OpenET_mean_2020_2025_bywatershed',
+  fileFormat: 'CSV',
+  selectors: [
+    'Wshed_Name',
+    'month',
+    'date',
+    'mean',
+    'stdDev',
+    'standard_error',
+    'count'
+  ]
+});
+
+Export.table.toDrive({
+  collection: results_HFF,
+  description: 'OpenET_mean_2020_2025_byseverity_HFF',
+  fileFormat: 'CSV',
+  selectors: [
+    'gridcode',
+    'month',
+    'date',
+    'mean',
+    'stdDev',
+    'standard_error',
+    'count'
+  ]
+});
+
+Export.table.toDrive({
+  collection: results_LF,
+  description: 'OpenET_mean_2020_2025_byseverity_LF',
+  fileFormat: 'CSV',
+  selectors: [
+    'gridcode',
+    'month',
+    'date',
+    'mean',
+    'stdDev',
+    'standard_error',
+    'count'
+  ]
+});
+
+Export.table.toDrive({
+  collection: results_unburned,
+  description: 'OpenET_mean_2020_2025_unburned',
+  fileFormat: 'CSV',
+  selectors: [
+    'gridcode',
+    'month',
+    'date',
+    'mean',
+    'stdDev',
+    'standard_error',
+    'count'
+  ]
+});

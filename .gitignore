@@ -1,0 +1,20 @@
+# Local/editor files
+.DS_Store
+.ipynb_checkpoints/
+.Rhistory
+.RData
+.Rproj.user/
+
+# ArcGIS temporary locks, logs, and generated search indexes
+*.sr.lock
+**/GpMessages/
+**/ImportLog/
+**/Index/
+**/*_index/
+
+# Archived working material is too large for the publication repository.
+Archive/
+Ch1_LowFlows/
+
+# This provisional source file exceeds GitHub's 100 MB per-file limit.
+Input Data/Streamflow/Q_all_sites_provisional_2015_2025.csv

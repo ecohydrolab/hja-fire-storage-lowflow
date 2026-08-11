@@ -20,6 +20,7 @@ The paper shows that:
 ## What to read so you know what to run
   - Read the Input Read Me file
     - The provisional five-minute streamflow file is not stored in this repository because it exceeds GitHub’s file-size limit. Download discharge_5min_merged.csv from the HJ Andrews Stream Discharge Data Portal and save it as Input Data/Streamflow/Q_all_sites_provisional_2015_2025.csv.
+    - https://andrewsforest.oregonstate.edu/sites/default/files/lter/data/weather/portal/DISCHARGE/data/index.html
 
   - Read the Output Data Read Me file
   - Read the Output Figures Read Me file

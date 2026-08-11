@@ -17,4 +17,7 @@ The paper shows that:
   - How does wildfire affect summer baseflow recession rates?
   - How does subsurface storage and burn severity mediate watershed responses?
 
-## What to run 
+## What to read so you know what to run
+  - Read the Input Read Me file
+  - Read the Output Data Read Me file
+  - Read the Output Figures Read Me file

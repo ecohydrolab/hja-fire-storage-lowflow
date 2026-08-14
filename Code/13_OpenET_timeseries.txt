@@ -1,12 +1,12 @@
-///Paste this text into Google Earth Engine Code Editor. Go to "Tasks" and hit run on each of the 4 tasks which each export a csv to your Google Drive.
+///Upload the "HolidayFarmFire_VegetationMortalityPolygons", "LookoutFire_VegetationMortalityPolygons","HJA_unburned_area", and "Gauged_Watersheds_(2018)" shapefiles to your Assets. Paste this code below into Google Earth Engine Code Editor. Change the "{username}" to your Google Earth Engine username. Run the code. Go to "Tasks" and hit run on each of the 4 tasks which each export a csv to your Google Drive.
 
 // ================================================================
 // Inputs
 // ================================================================
-var HFF_polygons = ee.FeatureCollection('users/duffshan/HFF_vegmort_polygons_Clip');
-var LF_polygons = ee.FeatureCollection('users/duffshan/LF_vegmort_polygons_Clip');
-var unburned_polygon = ee.FeatureCollection('users/duffshan/HJA_unburned');
-var watersheds = ee.FeatureCollection('users/duffshan/Gauged_Watersheds');
+var HFF_polygons = ee.FeatureCollection('users/{username}/HolidayFarmFire_VegetationMortalityPolygons');
+var LF_polygons = ee.FeatureCollection('users/{username}/LookoutFire_VegetationMortalityPolygons');
+var unburned_polygon = ee.FeatureCollection('users/{username}/HJA_unburned_area');
+var watersheds = ee.FeatureCollection('users/{username}/Gauged_Watersheds_(2018)');
 
 var et = ee.ImageCollection(
     'projects/openet/assets/ensemble/conus/gridmet/monthly/v2_1')

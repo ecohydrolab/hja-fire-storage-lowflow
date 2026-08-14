@@ -10,6 +10,12 @@ BACI_model_stats.csv
 -code 1 will export a csv called "Daily_meanQ_allsites_1950_2025.csv" which has daily Q in mm/s far all watersheds from 1950-2025. this will be input into code 2 which will export the "5thPercentileFlows_nofall_2000_2025.csv" which has the 5th percentile flow for each watershed and every wateryear in our selected pre-fire and post-fire period (2000-2025) excluding October data. this will be input into code 6 which exports this csv
 
 **********************************************************************************************************
+BACI_pctdiff_results.csv
+-this file reports the % difference between the observed Q5 in each burned watershed and the Q5 predicted by the prefire relationship with the unburned reference watershed for each post-fire year as well as the mean across all post-fire years. 2021 was set to NA for all watershed and 2023 was set to NA for WS 9 because the Q5 in the unburned watershed that year was outside the range used to fit the relationship.
+-make this by running codes 1, 2, and 6
+-code 1 will export a csv called "Daily_meanQ_allsites_1950_2025.csv" which has daily Q in mm/s far all watersheds from 1950-2025. this will be input into code 2 which will export the "5thPercentileFlows_nofall_2000_2025.csv" which has the 5th percentile flow for each watershed and every wateryear in our selected pre-fire and post-fire period (2000-2025) excluding October data. this will be input into code 6 which exports this csv
+
+**********************************************************************************************************
 BFR_intercepts.csv
 -this file reports the pre-fire slope of the regression between log(Q) and log(dQ/dt) (which is held constant for the post-fire data), the pre-fire intercept and associated confidence interval, the post-fire intercept and associated confidence interval, and the percent change from the pre-fire to post-fire period for every watershed.
 -make this by running codes 1-5 and 7

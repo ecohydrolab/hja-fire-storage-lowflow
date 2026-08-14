@@ -1,14 +1,19 @@
+#imports
 library(ggplot2)
 
+#set working directory
+setwd("/Users/shannonduffy/Library/CloudStorage/Box-Box/Shannon_Duffy/Writing/Code For Paper Publication/")
+
+#inputs
 #read in each watershed's recession points
-ws1_df<-read.csv("/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Intermediate_Outputs/recession_Q_vs_dQdt_points_WS 1.csv")
-ws2_df<-read.csv("/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Intermediate_Outputs/recession_Q_vs_dQdt_points_WS 2.csv")
-ws3_df<-read.csv("/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Intermediate_Outputs/recession_Q_vs_dQdt_points_WS 3.csv")
-ws8_df<-read.csv("/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Intermediate_Outputs/recession_Q_vs_dQdt_points_WS 8.csv")
-ws9_df<-read.csv("/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Intermediate_Outputs/recession_Q_vs_dQdt_points_WS 9.csv")
-ws10_df<-read.csv("/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Intermediate_Outputs/recession_Q_vs_dQdt_points_WS 10.csv")
-mc_df<-read.csv("/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Intermediate_Outputs/recession_Q_vs_dQdt_points_MC.csv")
-lo_df<-read.csv("/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Intermediate_Outputs/recession_Q_vs_dQdt_points_LO.csv")
+ws1_df<-read.csv("./Intermediate Outputs/recession_Q_vs_dQdt_points_WS 1.csv")
+ws2_df<-read.csv("./Intermediate Outputs/recession_Q_vs_dQdt_points_WS 2.csv")
+ws3_df<-read.csv("./Intermediate Outputs/recession_Q_vs_dQdt_points_WS 3.csv")
+ws8_df<-read.csv("./Intermediate Outputs/recession_Q_vs_dQdt_points_WS 8.csv")
+ws9_df<-read.csv("./Intermediate Outputs/recession_Q_vs_dQdt_points_WS 9.csv")
+ws10_df<-read.csv("./Intermediate Outputs/recession_Q_vs_dQdt_points_WS 10.csv")
+mc_df<-read.csv("./Intermediate Outputs/recession_Q_vs_dQdt_points_MC.csv")
+lo_df<-read.csv("./Intermediate Outputs/recession_Q_vs_dQdt_points_LO.csv")
 
 #create parallel regressions for WS 1 for pre- and post-fire
 ws1_df$Fire=as.factor(ws1_df$Fire)
@@ -241,7 +246,7 @@ intercept_table<- data.frame(
 
 intercept_table$pct_change<-100*(intercept_table$Postfire_Intercept-intercept_table$Prefire_Intercept)/abs(intercept_table$Prefire_Intercept)
 intercept_table$WATERSHED<-factor(intercept_table$WATERSHED, levels=c("WS 1","WS 2","WS 3","WS 9","WS 10","MC","WS 8","LO"))
-write.csv(intercept_table,"/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Output Data/BFR_intercepts.csv",row.names = FALSE)
+write.csv(intercept_table,"./Output Data/BFR_intercepts.csv",row.names = FALSE)
 
 #create data frame of model statistics for each watershed
 BFR_model_stats_table<- data.frame(
@@ -253,11 +258,10 @@ BFR_model_stats_table<- data.frame(
   p = c(ws1_B2_p,ws2_B2_p,ws3_B2_p,ws8_B2_p,ws9_B2_p,ws10_B2_p,mc_B2_p,lo_B2_p)
 )
 
-write.csv(BFR_model_stats_table,"/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Output Data/BFR_model_stats.csv",row.names = FALSE)
+write.csv(BFR_model_stats_table,"./Output Data/BFR_model_stats.csv",row.names = FALSE)
 
 #create barplot of percent change in intercept by watershed
-dev.new(width=6.5, height=3, unit="in")
-#png(file="/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Output Figures/BFR_intercept_barchart_nostars.png")
+dev.new()
 ggplot(data = intercept_table,aes(x=WATERSHED,y=pct_change,fill = Burn_Status, color=Burn_Status)) +
   geom_col()+ 
   scale_fill_manual(values = c("grey","white"))+
@@ -271,9 +275,9 @@ ggplot(data = intercept_table,aes(x=WATERSHED,y=pct_change,fill = Burn_Status, c
 dev.off()
 
 ggsave(
-  filename = "/Volumes/nobackup2/Segura_Lab/4_Students_Post_docts_Folders/2024_Shannon_Duffy/Ch1_LowFlows/Output Figures/BFR_intercept_barchart_nostars.png",
+  filename = "./Output Figures/Intermediate Figures/BFR_intercept_barchart.png",
   width = 6.5,
   height = 2.5,
-  units = "in",     # Options: "in", "cm", "mm", "px"
-  dpi = 300         # 300 DPI is optimal for high-quality print
+  units = "in",
+  dpi = 300
 )
